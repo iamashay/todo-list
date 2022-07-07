@@ -1,12 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Merienda+One&display=swap');
+
 
 /* Start 3 parallel horizont menu lines */
 .menu-icon > .line {
-    background-color: #292929;
-    height: 2px;
+    background-color: #ffffff;
+    height: 3px;
     display: block;
     width: 30px;
+    box-shadow: 1px 1px 1px 1px #3e000066;
 }
 .menu-icon > .line + .line {
     margin-top: 8px;
 }
 /* End 3 parallel horizont menu lines */
+
+* {
+    box-sizing: border-box;
+} 
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: #991b1b;
+    color: #fff;
+}
+
+#logo {
+    flex-grow: 2;
+    text-align: center;
+    font-size: calc(15px + 1vw);
+    font-weight: 700;
+    font-family: 'Merienda One', cursive;
+}
