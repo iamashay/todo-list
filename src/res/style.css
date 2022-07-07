@@ -2,6 +2,10 @@
 
 
 /* Start 3 parallel horizont menu lines */
+.menu-icon {
+    cursor: pointer;
+}
+
 .menu-icon > .line {
     background-color: #ffffff;
     height: 3px;
@@ -21,6 +25,7 @@
 html, body {
     margin: 0;
     padding: 0;
+    height: 100%;
 }
 
 header {
