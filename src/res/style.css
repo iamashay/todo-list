@@ -28,6 +28,11 @@ html, body {
     height: 100%;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+}
+
 header {
     display: flex;
     align-items: center;
@@ -42,4 +47,19 @@ header {
     font-size: calc(15px + 1vw);
     font-weight: 700;
     font-family: 'Merienda One', cursive;
+}
+
+#main-container {
+    display: flex;
+    flex-grow: 2;
+}
+
+#sidebar {
+    width: 280px;
+    background: cyan;
+}
+
+#task-container {
+    background: rgb(185, 183, 21);
+    flex-grow: 2;
 }
