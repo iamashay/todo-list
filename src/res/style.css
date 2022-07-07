@@ -1,0 +1,12 @@
+
+/* Start 3 parallel horizont menu lines */
+.menu-icon > .line {
+    background-color: #292929;
+    height: 2px;
+    display: block;
+    width: 30px;
+}
+.menu-icon > .line + .line {
+    margin-top: 8px;
+}
+/* End 3 parallel horizont menu lines */
