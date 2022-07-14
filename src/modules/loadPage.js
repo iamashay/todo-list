@@ -128,7 +128,7 @@ function generateTaskOptionContainer(){
     taskOptionContainer.classList = "task-options";
     
     const selectBoxContainer = document.createElement("div");
-    selectBoxContainer.className = "select-box-container";
+    selectBoxContainer.className = "select-input-container";
 
     const whenOptionContainer = generateWhenOptionContainer("Upcoming", "Today", "Past");
 
