@@ -156,12 +156,58 @@ function generateTaskListContainer(){
     return taskListContainer;
 }
 
+function generateDemoTaskDiv(title, date){
+
+    const taskDiv = document.createElement("div");
+    taskDiv.className = "task";
+
+    const taskTitle = document.createElement("div");
+    taskTitle.className = "task-tile";
+    taskTitle.textContent = title;
+
+    const taskStatus = document.createElement("input");
+    taskStatus.type = "checkbox";
+    taskStatus.className = "task-status";
+
+    const taskDate = document.createElement("div");
+    taskDate.className = "task-date";
+    taskDate.textContent = date;
+
+    const taskImportant = document.createElement("img");
+    taskImportant.className = "task-important";
+    taskImportant.src = require("../res/imgs/star-icon.png");
+
+    const taskOptions = document.createElement("div");
+    taskOptions.className = "task-options";
+    taskOptions.textContent = "||";
+
+    const leftTaskContainer = document.createElement("div");
+    leftTaskContainer.className = "left-task-container";
+
+    const rightTaskContainer = document.createElement("div");
+    rightTaskContainer.className = "right-task-container";
+
+    leftTaskContainer.appendChild(taskStatus);
+    leftTaskContainer.appendChild(taskTitle);
+    rightTaskContainer.appendChild(taskDate);
+    rightTaskContainer.appendChild(taskImportant);
+    rightTaskContainer.appendChild(taskOptions);
+
+    taskDiv.appendChild(leftTaskContainer);
+    taskDiv.appendChild(rightTaskContainer);
+
+    return taskDiv;
+}
+
 function generateTaskContainer(){
     const taskContainer = document.createElement("div");
     taskContainer.id = "task-container";
 
     const taskOptionContainer = generateTaskOptionContainer();  
     const taskListContainer = generateTaskListContainer();
+
+    const taskDemoDiv = generateDemoTaskDiv("DO 4 push ups", "12/06/2022");
+    taskListContainer.appendChild(taskDemoDiv);
 
     taskContainer.appendChild(taskOptionContainer);
     taskContainer.appendChild(taskListContainer);
@@ -183,5 +229,7 @@ export const loadPage = () => {
 
     body.appendChild(header);
     body.appendChild(mainContainer);
+
+
 
 }
