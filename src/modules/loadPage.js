@@ -86,10 +86,76 @@ function generateSidebar() {
     return sidebar;
 }
 
+function generateWhenOptionContainer(...options){
+    const whenOptionContainer = document.createElement("div");
+    whenOptionContainer.classList = "when-options";
+
+    options.forEach((option) => {
+        const optionDiv = document.createElement("div");
+        optionDiv.classList = `${option.toLowerCase()}-option`;
+        optionDiv.textContent = option;
+        whenOptionContainer.appendChild(optionDiv);
+    })
+
+    return whenOptionContainer;
+}
+
+function generateStatusOptionContainer(...options){
+    const statusOptionContainer = document.createElement("div");
+    statusOptionContainer.classList = "status-options";
+
+    const statusOptionLabel = document.createElement("label");
+    statusOptionLabel.for = "status-option";
+    statusOptionLabel.textContent = "Status:"
+
+    const statusOption = document.createElement("select");
+    statusOption.id = "status-option";
+
+    options.forEach((option) => {
+        const optionDiv = document.createElement("option");
+        optionDiv.value = option;
+        optionDiv.textContent = option;
+        statusOption.appendChild(optionDiv);
+    })
+
+    statusOptionContainer.appendChild(statusOptionLabel);
+    statusOptionContainer.appendChild(statusOption);
+
+    return statusOptionContainer;
+}
+
+
+function generateTaskOptionContainer(){
+    const taskOptionContainer = document.createElement("div");
+    taskOptionContainer.classList = "task-options";
+
+    const whenOptionContainer = generateWhenOptionContainer("Upcoming", "Today", "Past");
+
+    const statusOptionContainer = generateStatusOptionContainer("Unfinished", "All", "Completed");
+
+    const addTaskButton = document.createElement("button");
+    addTaskButton.id = "add-task"
+    addTaskButton.textContent = "+ Add Task";
+
+    taskOptionContainer.appendChild(whenOptionContainer);
+    taskOptionContainer.appendChild(statusOptionContainer);
+    taskOptionContainer.appendChild(addTaskButton);
+    
+    return taskOptionContainer;
+}
+
+function generateTaskListContainer(){
+    const taskListContainer = document.createElement("div");
+    taskListContainer.id = "task-list-container"
+}
+
 function generateTaskContainer(){
     const taskContainer = document.createElement("div");
     taskContainer.id = "task-container";
-    taskContainer.textContent = "TASKS' CONTAINER"
+
+    const taskOptionContainer = generateTaskOptionContainer();  
+
+    taskContainer.appendChild(taskOptionContainer);
     return taskContainer;
 }
 
