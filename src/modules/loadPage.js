@@ -88,7 +88,7 @@ function generateSidebar() {
 
 function generateWhenOptionContainer(...options){
     const whenOptionContainer = document.createElement("select");
-    whenOptionContainer.classList = "when-options task-container-options";
+    whenOptionContainer.classList = "when-options task-container-option";
 
     options.forEach((option) => {
         const optionDiv = document.createElement("option");
@@ -108,7 +108,7 @@ function generateStatusOptionContainer(...options){
     */
 
     const statusOption = document.createElement("select");
-    statusOption.id = "status-option task-container-option";
+    statusOption.classList = "status-option task-container-option";
 
     options.forEach((option) => {
         const optionDiv = document.createElement("option");
