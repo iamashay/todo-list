@@ -129,6 +129,7 @@ function generateTaskOptionContainer(){
     const taskOptionContainer = document.createElement("div");
     taskOptionContainer.classList = "task-options";
 
+
     const whenOptionContainer = generateWhenOptionContainer("Upcoming", "Today", "Past");
 
     const statusOptionContainer = generateStatusOptionContainer("Unfinished", "All", "Completed");
@@ -137,9 +138,13 @@ function generateTaskOptionContainer(){
     addTaskButton.id = "add-task"
     addTaskButton.textContent = "+ Add Task";
 
+    const secondOptionContainer = document.createElement("div");
+    secondOptionContainer.class = "second-option-container";
+
     taskOptionContainer.appendChild(whenOptionContainer);
-    taskOptionContainer.appendChild(statusOptionContainer);
-    taskOptionContainer.appendChild(addTaskButton);
+    secondOptionContainer.appendChild(statusOptionContainer);
+    secondOptionContainer.appendChild(addTaskButton);
+    taskOptionContainer.appendChild(secondOptionContainer);
     
     return taskOptionContainer;
 }
