@@ -101,9 +101,6 @@ function generateWhenOptionContainer(...options){
 }
 
 function generateStatusOptionContainer(...options){
-    const statusOptionContainer = document.createElement("div");
-    statusOptionContainer.classList = "status-options task-container-options";
-
     /*
     const statusOptionLabel = document.createElement("label");
     statusOptionLabel.for = "status-option";
@@ -111,7 +108,7 @@ function generateStatusOptionContainer(...options){
     */
 
     const statusOption = document.createElement("select");
-    statusOption.id = "status-option";
+    statusOption.id = "status-option task-container-option";
 
     options.forEach((option) => {
         const optionDiv = document.createElement("option");
@@ -121,9 +118,8 @@ function generateStatusOptionContainer(...options){
     })
 
     //statusOptionContainer.appendChild(statusOptionLabel);
-    statusOptionContainer.appendChild(statusOption);
 
-    return statusOptionContainer;
+    return statusOption;
 }
 
 
