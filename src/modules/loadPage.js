@@ -88,7 +88,7 @@ function generateSidebar() {
 
 function generateWhenOptionContainer(...options){
     const whenOptionContainer = document.createElement("select");
-    whenOptionContainer.classList = "when-options";
+    whenOptionContainer.classList = "when-options task-container-options";
 
     options.forEach((option) => {
         const optionDiv = document.createElement("option");
@@ -102,11 +102,13 @@ function generateWhenOptionContainer(...options){
 
 function generateStatusOptionContainer(...options){
     const statusOptionContainer = document.createElement("div");
-    statusOptionContainer.classList = "status-options";
+    statusOptionContainer.classList = "status-options task-container-options";
 
+    /*
     const statusOptionLabel = document.createElement("label");
     statusOptionLabel.for = "status-option";
     statusOptionLabel.textContent = "Status:"
+    */
 
     const statusOption = document.createElement("select");
     statusOption.id = "status-option";
@@ -118,7 +120,7 @@ function generateStatusOptionContainer(...options){
         statusOption.appendChild(optionDiv);
     })
 
-    statusOptionContainer.appendChild(statusOptionLabel);
+    //statusOptionContainer.appendChild(statusOptionLabel);
     statusOptionContainer.appendChild(statusOption);
 
     return statusOptionContainer;
@@ -128,11 +130,16 @@ function generateStatusOptionContainer(...options){
 function generateTaskOptionContainer(){
     const taskOptionContainer = document.createElement("div");
     taskOptionContainer.classList = "task-options";
-
+    
+    const selectBoxContainer = document.createElement("div");
+    selectBoxContainer.className = "select-box-container";
 
     const whenOptionContainer = generateWhenOptionContainer("Upcoming", "Today", "Past");
 
     const statusOptionContainer = generateStatusOptionContainer("Unfinished", "All", "Completed");
+
+    selectBoxContainer.appendChild(whenOptionContainer);
+    selectBoxContainer.appendChild(statusOptionContainer);
 
     const addTaskButton = document.createElement("button");
     addTaskButton.id = "add-task"
@@ -141,8 +148,7 @@ function generateTaskOptionContainer(){
     const secondOptionContainer = document.createElement("div");
     secondOptionContainer.className = "second-option-container";
 
-    taskOptionContainer.appendChild(whenOptionContainer);
-    secondOptionContainer.appendChild(statusOptionContainer);
+    taskOptionContainer.appendChild(selectBoxContainer);
     secondOptionContainer.appendChild(addTaskButton);
     taskOptionContainer.appendChild(secondOptionContainer);
     
