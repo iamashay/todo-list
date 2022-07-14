@@ -201,18 +201,25 @@ function generateDemoTaskDiv(title, date){
     return taskDiv;
 }
 
-function generateTaskContainer(){
+function generateTaskContainer() {
+
     const taskContainer = document.createElement("div");
     taskContainer.id = "task-container";
+
+    const taskWrapper = document.createElement("div");
+    taskWrapper.className = "task-wrapper";
 
     const taskOptionContainer = generateTaskOptionContainer();  
     const taskListContainer = generateTaskListContainer();
 
-    const taskDemoDiv = generateDemoTaskDiv("DO 4 push ups", "12/06/2022");
+    const taskDemoDiv = generateDemoTaskDiv("Do 4 push ups", "12/06/2022");
     taskListContainer.appendChild(taskDemoDiv);
 
-    taskContainer.appendChild(taskOptionContainer);
-    taskContainer.appendChild(taskListContainer);
+    taskWrapper.appendChild(taskOptionContainer);
+    taskWrapper.appendChild(taskListContainer);
+
+    taskContainer.appendChild(taskWrapper);
+
     return taskContainer;
 }
 
