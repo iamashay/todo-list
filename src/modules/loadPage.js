@@ -54,7 +54,7 @@ function generateProjectContainer(){
     projectList.id = "project-list";
 
     const addProject = document.createElement("div");
-    addProject.classList = "add-project";
+    addProject.classList = "add-project sidebar-option";
     const addProjectImg = new Image();
     addProjectImg.src = require("../res/imgs/add-project.png")
     addProjectImg.alt = "add project icon"
@@ -87,12 +87,12 @@ function generateSidebar() {
 }
 
 function generateWhenOptionContainer(...options){
-    const whenOptionContainer = document.createElement("div");
+    const whenOptionContainer = document.createElement("select");
     whenOptionContainer.classList = "when-options";
 
     options.forEach((option) => {
-        const optionDiv = document.createElement("div");
-        optionDiv.classList = `${option.toLowerCase()}-option`;
+        const optionDiv = document.createElement("option");
+        optionDiv.value = `${option.toLowerCase()}`;
         optionDiv.textContent = option;
         whenOptionContainer.appendChild(optionDiv);
     })
