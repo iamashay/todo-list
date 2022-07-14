@@ -146,7 +146,9 @@ function generateTaskOptionContainer(){
 
 function generateTaskListContainer(){
     const taskListContainer = document.createElement("div");
-    taskListContainer.id = "task-list-container"
+    taskListContainer.id = "task-list-container";
+    
+    return taskListContainer;
 }
 
 function generateTaskContainer(){
@@ -154,8 +156,10 @@ function generateTaskContainer(){
     taskContainer.id = "task-container";
 
     const taskOptionContainer = generateTaskOptionContainer();  
+    const taskListContainer = generateTaskListContainer();
 
     taskContainer.appendChild(taskOptionContainer);
+    taskContainer.appendChild(taskListContainer);
     return taskContainer;
 }
 
