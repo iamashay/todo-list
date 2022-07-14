@@ -139,7 +139,7 @@ function generateTaskOptionContainer(){
     addTaskButton.textContent = "+ Add Task";
 
     const secondOptionContainer = document.createElement("div");
-    secondOptionContainer.class = "second-option-container";
+    secondOptionContainer.className = "second-option-container";
 
     taskOptionContainer.appendChild(whenOptionContainer);
     secondOptionContainer.appendChild(statusOptionContainer);
