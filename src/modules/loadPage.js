@@ -180,8 +180,8 @@ function generateDemoTaskDiv(title, date){
     taskImportant.src = require("../res/imgs/star-icon.png");
 
     const taskOptions = document.createElement("div");
-    taskOptions.className = "task-options";
-    taskOptions.textContent = "||";
+    taskOptions.className = "task-menu";
+    taskOptions.textContent = "⋮";
 
     const leftTaskContainer = document.createElement("div");
     leftTaskContainer.className = "left-task-container";
