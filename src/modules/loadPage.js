@@ -167,9 +167,21 @@ function generateDemoTaskDiv(title, date){
     taskTitle.className = "task-tile";
     taskTitle.textContent = title;
 
+    //Custom checkbox
+    const taskStatusLabel = document.createElement("label");
+    taskStatusLabel.className = "check-container";
+
     const taskStatus = document.createElement("input");
     taskStatus.type = "checkbox";
-    taskStatus.className = "task-status";
+    taskStatus.classList = "task-status checkbox";
+
+    const taskStatusCheckmark = document.createElement("span");
+    taskStatusCheckmark.className = "checkmark";
+
+    taskStatusLabel.appendChild(taskStatus);
+    taskStatusLabel.appendChild(taskStatusCheckmark);
+
+    //custom checkbox end
 
     const taskDate = document.createElement("div");
     taskDate.className = "task-date";
@@ -189,7 +201,7 @@ function generateDemoTaskDiv(title, date){
     const rightTaskContainer = document.createElement("div");
     rightTaskContainer.className = "right-task-container";
 
-    leftTaskContainer.appendChild(taskStatus);
+    leftTaskContainer.appendChild(taskStatusLabel);
     leftTaskContainer.appendChild(taskTitle);
     rightTaskContainer.appendChild(taskDate);
     rightTaskContainer.appendChild(taskImportant);
