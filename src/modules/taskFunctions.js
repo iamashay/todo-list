@@ -21,3 +21,8 @@ function deleteTask(projectName, taskID){
     myProject.splice(taskID, 1);
 }
 
+function getTasks(projectName){
+    return projectList[projectName];
+}
+
+export { createTask, editTask, deleteTask, getTasks}
