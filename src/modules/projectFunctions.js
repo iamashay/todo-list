@@ -25,3 +25,9 @@ function deleteProject(projectName){
     }
     return false;
 }
+
+function getProjects() {
+    return Object.getOwnPropertyNames(projectList);
+}
+
+export {createProject, editProject, deleteProject, getProjects}
