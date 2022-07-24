@@ -12,7 +12,7 @@ class Project {
     }
 
     set name(newName){
-        this.name = newName;
+        this._name = newName;
     }
 }
 
