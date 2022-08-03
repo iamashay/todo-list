@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 function generateHeader(){
     const header = document.createElement("header");
 
@@ -235,6 +237,71 @@ function generateTaskContainer() {
     return taskContainer;
 }
 
+function generateTaskFormInput(name, label, type){
+    
+    const inputDiv = document.createElement("div");
+    inputDiv.className = "input-box";
+
+    const inputLabel = document.createElement("label");
+    inputLabel.for = name;
+    inputLabel.textContent = label;
+
+    let myInput;
+    if (type === "textarea")  {
+        myInput = document.createElement("textarea");
+    } else if (type === "checkbox")  {
+        myInput = document.createElement("input");
+        inputDiv.className = "input-box-checkbox";
+        myInput.type = type;
+    }
+    else {
+        myInput = document.createElement("input");
+        myInput.type = type;
+    }
+    myInput.name = name;
+    myInput.id = name;
+    
+    inputDiv.append(inputLabel, myInput);
+    return inputDiv;
+}
+
+function generateAddTaskForm(){
+    
+    const myForm = document.createElement("form");
+    myForm.className = "add-task-form";
+
+    const taskTitle = generateTaskFormInput("task-title", "Title", "text");
+    const taskDueDate = generateTaskFormInput("task-due-date", "Due Date", "date");
+    const taskImportant = generateTaskFormInput("task-important", "Is Important?", "checkbox");
+    const taskDescription = generateTaskFormInput("task-description", "Description", "textarea");
+    
+    const submitBut = document.createElement("button");
+    submitBut.className = "normal-button";
+    submitBut.textContent = "Add Task";
+
+    myForm.append(taskTitle, taskDueDate, taskImportant, taskDescription, submitBut);
+
+    return myForm;
+}
+
+function generatePopup() {
+    const popupOverlay = document.createElement("div");
+    popupOverlay.className = "popup-overlay";
+
+    const popupContainer = document.createElement("div");
+    popupContainer.className = "popup-container";
+
+    const closePopupBut = document.createElement("div");
+    closePopupBut.className = "close-popup";
+    closePopupBut.textContent = "X";
+
+    const myForm = generateAddTaskForm();
+    popupOverlay.appendChild(popupContainer);
+    popupContainer.append(closePopupBut, myForm);
+
+    return popupOverlay;
+}
+
 export const loadPage = () => {
     const body = document.body;
     const header = generateHeader();
@@ -251,6 +318,6 @@ export const loadPage = () => {
     body.appendChild(header);
     body.appendChild(mainContainer);
 
-
+    body.appendChild(generatePopup())
 
 }

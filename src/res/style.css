@@ -260,3 +260,74 @@ header {
 #task-list-container::-webkit-scrollbar-thumb {
     background-color: white;
 }
+
+
+/* Start styles for form popup */
+.popup-overlay {
+    z-index: 99;
+    background: #00000085;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-container {
+    margin-top: 80px;
+    background-color: white;
+    width: min(50vw, 400px);
+    padding: 20px;
+    border-radius: 6px;
+    position: relative;
+}
+
+.input-box {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.input-box input {
+    font-size: calc(10px + 0.4vw);
+    padding: 2px;
+}
+
+.add-task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.normal-button {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.add-task-form .normal-button {
+    align-self: center;
+}
+
+.close-popup {
+    position: absolute;
+    top: 2px;
+    right: 8px;
+    font-size: 20px;
+    font-weight: 600;
+    font-family: monospace, sans-serif;
+    cursor: pointer;
+}
+
+.input-box-checkbox {
+    display: flex;
+    gap: 4%;
+    align-items: center;
+}
+
+.input-box-checkbox input[type="checkbox"]{
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+}
