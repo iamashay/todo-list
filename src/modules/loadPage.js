@@ -287,6 +287,7 @@ function generateAddTaskForm(){
 function generatePopup() {
     const popupOverlay = document.createElement("div");
     popupOverlay.className = "popup-overlay";
+    popupOverlay.style.display = "none";
 
     const popupContainer = document.createElement("div");
     popupContainer.className = "popup-container";
