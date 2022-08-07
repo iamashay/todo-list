@@ -284,6 +284,28 @@ header {
     position: relative;
 }
 
+@keyframes removePopup {
+    0%   {
+        opacity: 100%;
+    }
+    100% {
+        margin-right: 80vw;
+        opacity: 0%;
+        display: none;
+    }
+}
+
+@keyframes openPopup {
+    0%   {
+        opacity: 0%;
+    }
+    100% {
+        opacity: 100%;
+    }
+}
+
+/* end popup */
+
 .input-box {
     display: flex;
     flex-direction: column;

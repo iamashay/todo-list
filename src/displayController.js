@@ -8,45 +8,57 @@ const projectListContainer = qs("#project-list");
 
 class Popup {
 
-    static popupOverlay = qs(".popup-overlay");
-    static popupBox = qs(".popup-container");
+    static toggle() {
+        const popupOverlay = qs(".popup-overlay");
+        const popupContainer = qs(".popup-container");
 
-    static toggle () {
-        console.log(Popup.popupOverlay)
-        if (Popup.popupOverlay.style.display === "none"){
-            Popup.popupOverlay.style.display = "";
+        console.log(this.popupOverlay)
+        if (popupOverlay.style.display === "none"){
+            popupOverlay.style.display = "";
+            popupOverlay.style.animation = "openPopup 0.5s";
         }else {
-            Popup.popupOverlay.style.display = "none";
+            popupOverlay.style.animation = "removePopup 0.5s";
+            setTimeout(() => {
+                popupOverlay.style.display = "none";
+                popupOverlay.style.animation = "";    
+            }, 500)
         }
     }
 
     static addEvents() {
-        console.log(Popup.popupOverlay);
-        Popup.popupOverlay.addEventListener("click", toggle);
-        popupBox.addEventListener("click", (e) => e.stopPropogation);
-    }
+        const popupOverlay = qs(".popup-overlay");
+        const popupContainer = qs(".popup-container");
+        const closePopupBut = qs(".close-popup");
 
-    static init() {
-        Popup.addEvents();
-    }
-
-}
+        popupContainer.addEventListener("click", (e) => e.stopPropagation());
+        popupOverlay.addEventListener("click", this.toggle);
+        closePopupBut.addEventListener("click", this.toggle);
 
 
-class addTask {
-    static addTaskButton = qs("#add-task");
-    
-    static addEvents() {
-        addTaskButton.addEventListener("click", Popup().toggle);
     }
 
     static init() {
         this.addEvents();
     }
+
 }
 
 
-export function displayController() {
+
+class addTaskForm {
+    static addEvents(popupToggle) {
+        const addTaskPopupButton = qs("#add-task");
+        addTaskPopupButton.addEventListener("click", popupToggle);
+    }
+
+    static init(popupToggle) {
+        this.addEvents(popupToggle);
+    }
+}
+
+
+function displayController() {
     Popup.init();
-    addTask.init();
+    addTaskForm.init(Popup.toggle);
 }
+displayController()
