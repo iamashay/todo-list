@@ -237,7 +237,7 @@ function generateTaskContainer() {
     return taskContainer;
 }
 
-function generateTaskFormInput(name, label, type){
+function generateTaskFormInput(name, label, type, required=false){
     
     const inputDiv = document.createElement("div");
     inputDiv.className = "input-box";
@@ -247,6 +247,8 @@ function generateTaskFormInput(name, label, type){
     inputLabel.textContent = label;
 
     let myInput;
+
+
     if (type === "textarea")  {
         myInput = document.createElement("textarea");
     } else if (type === "checkbox")  {
@@ -260,7 +262,10 @@ function generateTaskFormInput(name, label, type){
     }
     myInput.name = name;
     myInput.id = name;
-    
+    if (required){
+        myInput.required = true;
+    }
+
     inputDiv.append(inputLabel, myInput);
     return inputDiv;
 }
@@ -270,8 +275,8 @@ function generateAddTaskForm(){
     const myForm = document.createElement("form");
     myForm.className = "add-task-form";
 
-    const taskTitle = generateTaskFormInput("task-title", "Title", "text");
-    const taskDueDate = generateTaskFormInput("task-due-date", "Due Date", "date");
+    const taskTitle = generateTaskFormInput("task-title", "Title", "text", true);
+    const taskDueDate = generateTaskFormInput("task-due-date", "Due Date", "date", true);
     const taskImportant = generateTaskFormInput("task-important", "Is Important?", "checkbox");
     const taskDescription = generateTaskFormInput("task-description", "Description", "textarea");
     
