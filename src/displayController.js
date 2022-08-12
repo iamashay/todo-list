@@ -1,6 +1,6 @@
 import * as projectFunction from "./modules/projectFunctions.js"
 import * as taskFunction from "./modules/taskFunctions.js"
-import { compareAsc, format, isValid, parse } from "date-fns"
+import { compareAsc, format, isValid, parse, fromUnixTime } from "date-fns"
 import { qs } from "./modules/globalFunctions.js"
 
 const taskListContainer = qs(".task-list-container");
@@ -24,6 +24,7 @@ class Popup {
         }
     }
 
+
     static addEvents() {
         const popupOverlay = qs(".popup-overlay");
         const popupContainer = qs(".popup-container");
@@ -46,8 +47,7 @@ class taskList {
 
     static buildTaskElement(task, projectName, taskID) {
         const title = task.title;
-        const date = task.date;
-        
+        const date =  format(new Date(task.dueDate), "dd/MM/yyyy");
 
         const taskDiv = document.createElement("div");
         taskDiv.className = "task";
@@ -122,6 +122,7 @@ class addTaskForm {
         let dueDate = qs("#task-due-date").value;
         const isImportant = qs("#task-important").checked;
         const description = qs("#task-description").value;
+        const myForm = qs(".add-task-form");
 
         if (title && title.length > 0){
             dueDate = +new Date(dueDate);
@@ -134,7 +135,7 @@ class addTaskForm {
         event.preventDefault();
 
         taskList.update("Default");
-
+        myForm.reset();
     }
 
     static addEvents(popupToggle) {
@@ -150,6 +151,7 @@ class addTaskForm {
     static init(popupToggle) {
         this.addEvents(popupToggle);
     }
+
 }
 
 
