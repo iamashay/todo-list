@@ -40,7 +40,7 @@ class Task {
 
     set isImportant(importantStatus){
         if (typeof importantStatus !== "boolean") return;
-        this._importantStatus = importantStatus;
+        this._isImportant = importantStatus;
     }
 
 
