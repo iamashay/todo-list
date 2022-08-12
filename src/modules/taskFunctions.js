@@ -3,7 +3,7 @@ import {projectList} from "./projectModel"
 
 function createTask(projectName, jsonValue){
     const newTask = new Task(jsonValue.title, jsonValue.dueDate, jsonValue.description, jsonValue.isImportant);
-    projectList[projectName].taskList.push(newTask);
+    projectList[projectName].taskList.unshift(newTask);
     return newTask;
 }
 
