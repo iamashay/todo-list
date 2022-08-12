@@ -22,7 +22,7 @@ function deleteTask(projectName, taskID){
 }
 
 function getTasks(projectName){
-    return projectList[projectName];
+    return projectList[projectName].taskList;
 }
 
 export { createTask, editTask, deleteTask, getTasks}
