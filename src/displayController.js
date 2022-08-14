@@ -6,6 +6,19 @@ import { qs, qsAll } from "./modules/globalFunctions.js"
 const taskListContainer = qs(".task-list-container");
 const projectListContainer = qs("#project-list");
 
+taskFunction.createTask("Default", {
+    title: "asd", dueDate: 1760502233444, description: "sdf", isImportant: true, status: false
+})
+
+taskFunction.createTask("Default", {
+    title: "Yo", dueDate: 1760502233444, description: "sdf", isImportant: false, status: true
+})
+
+taskFunction.createTask("Default", {
+    title: "Yo", dueDate: +new Date(), description: "sdf", isImportant: true, status: true
+})
+
+
 class Popup {
 
     static toggle() {
