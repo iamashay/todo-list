@@ -1,7 +1,7 @@
 import * as projectFunction from "./modules/projectFunctions.js"
 import * as taskFunction from "./modules/taskFunctions.js"
 import { compareAsc, format, isValid, parse, fromUnixTime } from "date-fns"
-import { qs } from "./modules/globalFunctions.js"
+import { qs, qsAll } from "./modules/globalFunctions.js"
 
 const taskListContainer = qs(".task-list-container");
 const projectListContainer = qs("#project-list");
@@ -50,6 +50,7 @@ class taskList {
         const date =  format(new Date(task.dueDate), "do MMMM, yyyy");
         const isImportant = task.isImportant;
         const description = task.description;
+        const taskStatus = task.status;
 
         const taskDiv = document.createElement("div");
         taskDiv.className = "task";
@@ -64,14 +65,15 @@ class taskList {
         const taskStatusLabel = document.createElement("label");
         taskStatusLabel.className = "check-container";
     
-        const taskStatus = document.createElement("input");
-        taskStatus.type = "checkbox";
-        taskStatus.classList = "task-status checkbox";
-    
+        const taskStatusDiv = document.createElement("input");
+        taskStatusDiv.type = "checkbox";
+        taskStatusDiv.classList = "task-status checkbox";
+        taskStatusDiv.checked = taskStatus;
+        console.log(taskStatusDiv, taskStatus)
         const taskStatusCheckmark = document.createElement("span");
         taskStatusCheckmark.className = "checkmark";
     
-        taskStatusLabel.appendChild(taskStatus);
+        taskStatusLabel.appendChild(taskStatusDiv);
         taskStatusLabel.appendChild(taskStatusCheckmark);
     
         //custom checkbox end
@@ -251,6 +253,11 @@ function displayController() {
     Popup.init();
     addTaskForm.init(Popup.toggle);
     taskList.update("Default");
+
+    const taskContainerOptions = qsAll(".task-container-option");
+    taskContainerOptions.forEach((option) => {
+        option.addEventListener("change", () => {taskList.update("Default")});
+    })
 }
 
 displayController()
