@@ -47,7 +47,9 @@ class taskList {
 
     static buildTaskElement(task, projectName, taskID) {
         const title = task.title;
-        const date =  format(new Date(task.dueDate), "dd/MM/yyyy");
+        const date =  format(new Date(task.dueDate), "do MMMM, yyyy");
+        const isImportant = task.isImportant;
+        const description = task.description;
 
         const taskDiv = document.createElement("div");
         taskDiv.className = "task";
@@ -81,7 +83,12 @@ class taskList {
         const taskImportant = document.createElement("img");
         taskImportant.className = "task-important";
         taskImportant.src = require("./res/imgs/star-icon.png");
-    
+
+        if (!isImportant){
+            taskImportant.style.filter = "grayscale(1)";
+        }
+
+
         const taskOptions = document.createElement("div");
         taskOptions.className = "task-menu";
         taskOptions.textContent = "⋮";
@@ -104,16 +111,29 @@ class taskList {
         return taskDiv;
     }
 
+    static putNew(task, projectName){
+        const taskListContainer = qs("#task-list-container");
+        const taskIndex = taskFunction.getTasks(projectName).length;
+        const taskDiv = this.buildTaskElement(task, projectName, taskIndex);
+        taskListContainer.prepend(taskDiv);
+    }
+
     static update(projectName){
         const taskListContainer = qs("#task-list-container");
         taskListContainer.innerHTML = "";
         const tasks = taskFunction.getTasks(projectName);
 
-        tasks.forEach((task, index) => {
-            taskListContainer.append(this.buildTaskElement(task, projectName, index));
+        tasks.forEach((task, taskIndex) => {
+            const taskDiv = this.buildTaskElement(task, projectName, taskIndex);
+            taskListContainer.prepend(taskDiv);
         })
     }
+
+    static delete(projectName, taskIndex){
+        taskFunction.getTasks(projectName).slice(taskIndex);
+    }
 }
+
 
 class addTaskForm {
 
@@ -124,9 +144,10 @@ class addTaskForm {
         const description = qs("#task-description").value;
         const myForm = qs(".add-task-form");
 
+        let newTask;
         if (title && title.length > 0){
             dueDate = +new Date(dueDate);
-            taskFunction.createTask("Default", {
+            newTask = taskFunction.createTask("Default", {
                 title, dueDate, description, isImportant
             })
             console.log(taskFunction.getTasks("Default"))
@@ -134,7 +155,7 @@ class addTaskForm {
         }
         event.preventDefault();
 
-        taskList.update("Default");
+        taskList.putNew(newTask, "Default");
         myForm.reset();
     }
 
