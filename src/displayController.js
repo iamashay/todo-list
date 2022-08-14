@@ -89,9 +89,7 @@ class taskList {
         }
 
 
-        const taskOptions = document.createElement("div");
-        taskOptions.className = "task-menu";
-        taskOptions.textContent = "⋮";
+        const dropdowmTaskOptions = taskMenu.build();
     
         const leftTaskContainer = document.createElement("div");
         leftTaskContainer.className = "left-task-container";
@@ -103,12 +101,55 @@ class taskList {
         leftTaskContainer.appendChild(taskTitle);
         rightTaskContainer.appendChild(taskDate);
         rightTaskContainer.appendChild(taskImportant);
-        rightTaskContainer.appendChild(taskOptions);
+        rightTaskContainer.appendChild(dropdowmTaskOptions);
     
         taskDiv.appendChild(leftTaskContainer);
         taskDiv.appendChild(rightTaskContainer);
     
         return taskDiv;
+    }  
+
+    static filter(taskArray){
+        const whenOption = qs(".when-options");
+        const statusOption = qs(".status-option");
+        console.log(taskArray);
+        let filterTaskArray = taskArray.filter((task) => { //filter task array with due date options
+            const taskDueDate = new Date(new Date(task.dueDate).toDateString());
+            const currentDate = new Date(new Date().toDateString()); //removing time from the date
+            const compareDate = compareAsc(taskDueDate, currentDate);
+            let currentOptionValue;
+
+            if (whenOption.value === "upcoming"){
+                currentOptionValue = 1;
+            }else if(whenOption.value === "today"){
+                currentOptionValue = 0;
+            }else if(whenOption.value === "past"){
+                currentOptionValue = -1;
+            }
+            console.log(compareDate, currentOptionValue, whenOption.value, currentDate, taskDueDate);
+            if (compareDate === currentOptionValue) return true;
+
+        });
+        console.log(filterTaskArray);
+
+        filterTaskArray = filterTaskArray.filter((task) => {  //filter tasks based on their completion status
+            let currentOptionValue;
+            const taskStatus = task.status;
+            if (statusOption.value === "unfinished"){
+                currentOptionValue = false;
+            }else if(statusOption.value === "all"){
+                return true;
+            }else if(statusOption.value === "completed"){
+                currentOptionValue = true;
+            }
+
+            if (currentOptionValue === taskStatus) return true;
+
+        })
+        console.log(filterTaskArray);
+
+        
+        return filterTaskArray;
     }
 
     static putNew(task, projectName){
@@ -122,8 +163,9 @@ class taskList {
         const taskListContainer = qs("#task-list-container");
         taskListContainer.innerHTML = "";
         const tasks = taskFunction.getTasks(projectName);
+        const filterTask = this.filter(tasks);
 
-        tasks.forEach((task, taskIndex) => {
+        filterTask.forEach((task, taskIndex) => {
             const taskDiv = this.buildTaskElement(task, projectName, taskIndex);
             taskListContainer.prepend(taskDiv);
         })
@@ -134,6 +176,34 @@ class taskList {
     }
 }
 
+
+
+class taskMenu {
+    static build(){
+        const dropdown = document.createElement("div");
+        dropdown.className = "dropdown";
+        
+        const taskOptions = document.createElement("div");
+        taskOptions.className = "task-menu";
+        taskOptions.textContent = "⋮";
+
+        const dropdownContent = document.createElement("div");
+        dropdownContent.className = "dropdown-content";
+
+        const editOption = document.createElement("div");
+        editOption.textContent = "Edit";
+        editOption.className = "dropdown-option";
+        
+        const removeOption = document.createElement("div");
+        removeOption.textContent = "Remove";
+        removeOption.className = "dropdown-option";
+
+        dropdownContent.append(editOption, removeOption);
+        dropdown.append(taskOptions, dropdownContent);
+
+        return dropdown;
+    }
+}
 
 class addTaskForm {
 
@@ -180,7 +250,7 @@ function displayController() {
     
     Popup.init();
     addTaskForm.init(Popup.toggle);
-
+    taskList.update("Default");
 }
 
 displayController()
