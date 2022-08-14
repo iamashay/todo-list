@@ -1,10 +1,11 @@
 class Task {
     
-    constructor(title, dueDate, description = null, isImportant = false){
+    constructor(title, dueDate, description = null, isImportant = false, status = false){
         this.title = title;
         this.dueDate = dueDate;
         this.description = description;
         this.isImportant = isImportant;
+        this.status = status;
     }
 
     get title(){
@@ -41,6 +42,14 @@ class Task {
     set isImportant(importantStatus){
         if (typeof importantStatus !== "boolean") return;
         this._isImportant = importantStatus;
+    }
+
+    get status(){
+        return this._status;
+    }
+
+    set status(newStatus){
+        this._status = newStatus;
     }
 
 
