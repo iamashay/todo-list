@@ -2,7 +2,7 @@ import {Task} from "./taskModel"
 import {projectList} from "./projectModel"
 
 function createTask(projectName, jsonValue){
-    const newTask = new Task(jsonValue.title, jsonValue.dueDate, jsonValue.description, jsonValue.isImportant);
+    const newTask = new Task(jsonValue.title, jsonValue.dueDate, jsonValue.description, jsonValue.isImportant, jsonValue.status);
     projectList[projectName].taskList.unshift(newTask);
     return newTask;
 }
