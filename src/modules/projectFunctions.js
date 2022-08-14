@@ -6,6 +6,8 @@ function createProject(projectName){
     return newProject;
 }
 
+createProject("Default")
+
 function editProject(oldProjectName, newProjectName){
     const myProject = projectList[oldProjectName];
     if (!(newProjectName in projectList)) {
