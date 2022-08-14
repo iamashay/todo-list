@@ -94,7 +94,7 @@ function generateWhenOptionContainer(...options){
 
     options.forEach((option) => {
         const optionDiv = document.createElement("option");
-        optionDiv.value = `${option.toLowerCase()}`;
+        optionDiv.value = option.toLowerCase();
         optionDiv.textContent = option;
         whenOptionContainer.appendChild(optionDiv);
     })
@@ -114,7 +114,7 @@ function generateStatusOptionContainer(...options){
 
     options.forEach((option) => {
         const optionDiv = document.createElement("option");
-        optionDiv.value = option;
+        optionDiv.value = option.toLowerCase();
         optionDiv.textContent = option;
         statusOption.appendChild(optionDiv);
     })
