@@ -25,4 +25,9 @@ function getTasks(projectName){
     return projectList[projectName].taskList;
 }
 
-export { createTask, editTask, deleteTask, getTasks}
+function changeTaskStatus(projectName, taskID, status){
+    const myTask = projectList[projectName][taskID];
+    myTask.status = status;
+}
+
+export { createTask, editTask, deleteTask, getTasks, changeTaskStatus}
