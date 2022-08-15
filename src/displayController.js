@@ -85,7 +85,9 @@ class taskList {
         console.log(taskStatusDiv, taskStatus)
         const taskStatusCheckmark = document.createElement("span");
         taskStatusCheckmark.className = "checkmark";
-    
+        
+        taskStatusDiv.addEventListener("change", () => this.markTaskStatus(projectName, taskID));
+
         taskStatusLabel.appendChild(taskStatusDiv);
         taskStatusLabel.appendChild(taskStatusCheckmark);
     
@@ -103,6 +105,7 @@ class taskList {
             taskImportant.style.filter = "grayscale(1)";
         }
 
+        
 
         const dropdowmTaskOptions = taskMenu.build();
     
@@ -186,9 +189,14 @@ class taskList {
         })
     }
 
-    static delete(projectName, taskIndex){
-        taskFunction.getTasks(projectName).slice(taskIndex);
+    static markTaskStatus(projectName, taskIndex){
+        const checkbox = qs(`.task[data-project="${projectName}"][data-task="${taskIndex}"] input`);
+        taskFunction.getTasks(projectName)[taskIndex].status = checkbox.checked;
+        console.log(taskFunction.getTasks(projectName)[taskIndex])
     }
+
+
+
 }
 
 
@@ -218,6 +226,18 @@ class taskMenu {
 
         return dropdown;
     }
+
+
+
+    static delete(projectName, taskIndex){
+        taskFunction.getTasks(projectName).slice(taskIndex);
+    }
+
+    static addEvents(){
+        const task = qsAll(".task-status");
+        taskStatusCheckmark.addEventListener("", () => this.markComplete())
+    }
+
 }
 
 class addTaskForm {
