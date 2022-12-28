@@ -82,11 +82,10 @@ class taskList {
         taskStatusDiv.type = "checkbox";
         taskStatusDiv.classList = "task-status checkbox";
         taskStatusDiv.checked = taskStatus;
-        console.log(taskStatusDiv, taskStatus)
         const taskStatusCheckmark = document.createElement("span");
         taskStatusCheckmark.className = "checkmark";
         
-        taskStatusDiv.addEventListener("change", () => this.markTaskStatus(projectName, taskID));
+        taskStatusDiv.addEventListener("change", () => this.markTaskStatus(task, projectName, taskID));
 
         taskStatusLabel.appendChild(taskStatusDiv);
         taskStatusLabel.appendChild(taskStatusCheckmark);
@@ -105,9 +104,10 @@ class taskList {
             taskImportant.style.filter = "grayscale(1)";
         }
 
+        taskImportant.addEventListener("click", () => this.markImportant(task, projectName, taskID));
         
 
-        const dropdowmTaskOptions = taskMenu.build();
+        const dropdowmTaskOptions = taskDropdownMenu.build(projectName, taskID);
     
         const leftTaskContainer = document.createElement("div");
         leftTaskContainer.className = "left-task-container";
@@ -127,52 +127,46 @@ class taskList {
         return taskDiv;
     }  
 
-    static filter(taskArray){
+    static filter(task){
         const whenOption = qs(".when-options");
         const statusOption = qs(".status-option");
-        console.log(taskArray);
-        let filterTaskArray = taskArray.filter((task) => { //filter task array with due date options
-            const taskDueDate = new Date(new Date(task.dueDate).toDateString());
-            const currentDate = new Date(new Date().toDateString()); //removing time from the date
-            const compareDate = compareAsc(taskDueDate, currentDate);
-            let currentOptionValue;
 
-            if (whenOption.value === "upcoming"){
-                currentOptionValue = 1;
-            }else if(whenOption.value === "today"){
-                currentOptionValue = 0;
-            }else if(whenOption.value === "past"){
-                currentOptionValue = -1;
-            }
-            console.log(compareDate, currentOptionValue, whenOption.value, currentDate, taskDueDate);
-            if (compareDate === currentOptionValue) return true;
+        const taskDueDate = new Date(new Date(task.dueDate).toDateString());
+        const currentDate = new Date(new Date().toDateString()); //removing time from the date
+        const compareDate = compareAsc(taskDueDate, currentDate);
+        let filterPassed = 0;
+        let currentWhenOptionValue;
 
-        });
-        console.log(filterTaskArray);
+        if (whenOption.value === "upcoming"){
+            currentWhenOptionValue = 1;
+        }else if(whenOption.value === "today"){
+            currentWhenOptionValue = 0;
+        }else if(whenOption.value === "past"){
+            currentWhenOptionValue = -1;
+        }
 
-        filterTaskArray = filterTaskArray.filter((task) => {  //filter tasks based on their completion status
-            let currentOptionValue;
-            const taskStatus = task.status;
-            if (statusOption.value === "unfinished"){
-                currentOptionValue = false;
-            }else if(statusOption.value === "all"){
-                return true;
-            }else if(statusOption.value === "completed"){
-                currentOptionValue = true;
-            }
+        if (compareDate === currentWhenOptionValue) filterPassed++;
 
-            if (currentOptionValue === taskStatus) return true;
+        let currentStatusOptionValue;
+        const taskStatus = task.status;
+        if (statusOption.value === "unfinished"){
+            currentStatusOptionValue = false;
+        }else if(statusOption.value === "all"){
+            if (filterPassed === 1) return true;
+        }else if(statusOption.value === "completed"){
+            currentStatusOptionValue = true;
+        }
 
-        })
-        console.log(filterTaskArray);
+        if (currentStatusOptionValue === taskStatus) filterPassed++;
 
+        if (filterPassed === 2) return true; //check if the task has passed both when and status filter
         
-        return filterTaskArray;
+        return false;
     }
 
     static putNew(task, projectName){
         const taskListContainer = qs("#task-list-container");
-        const taskIndex = taskFunction.getTasks(projectName).length;
+        const taskIndex = 0;
         const taskDiv = this.buildTaskElement(task, projectName, taskIndex);
         taskListContainer.prepend(taskDiv);
     }
@@ -181,28 +175,37 @@ class taskList {
         const taskListContainer = qs("#task-list-container");
         taskListContainer.innerHTML = "";
         const tasks = taskFunction.getTasks(projectName);
-        const filterTask = this.filter(tasks);
 
-        filterTask.forEach((task, taskIndex) => {
+        tasks.forEach((task, taskIndex) => {
+            if (!this.filter(task)) return;
             const taskDiv = this.buildTaskElement(task, projectName, taskIndex);
-            taskListContainer.prepend(taskDiv);
+            taskListContainer.append(taskDiv);
         })
     }
 
-    static markTaskStatus(projectName, taskIndex){
+    static markTaskStatus(task, projectName, taskIndex){
         const checkbox = qs(`.task[data-project="${projectName}"][data-task="${taskIndex}"] input`);
-        taskFunction.getTasks(projectName)[taskIndex].status = checkbox.checked;
-        console.log(taskFunction.getTasks(projectName)[taskIndex])
+        task.status = checkbox.checked;
     }
 
-
+    static markImportant(task, projectName, taskIndex){
+        const starImage = qs(`.task[data-project="${projectName}"][data-task="${taskIndex}"] .task-important`);
+        if(starImage.style.filter === "grayscale(1)"){
+            starImage.style.filter = "";
+            task.isImportant = true;
+        }else{
+            starImage.style.filter = "grayscale(1)"
+            task.isImportant = false;
+        }
+    
+    }
 
 }
 
 
 
-class taskMenu {
-    static build(){
+class taskDropdownMenu {
+    static build(projectName, taskID){
         const dropdown = document.createElement("div");
         dropdown.className = "dropdown";
         
@@ -215,11 +218,20 @@ class taskMenu {
 
         const editOption = document.createElement("div");
         editOption.textContent = "Edit";
+        editOption.className = "edit-task";
         editOption.className = "dropdown-option";
         
         const removeOption = document.createElement("div");
         removeOption.textContent = "Remove";
+        removeOption.className = "remove-task";
         removeOption.className = "dropdown-option";
+
+        //editOption.addEventListener("click", ()=>this.delete(projectName, taskID));
+        removeOption.addEventListener("click", ()=>{
+        
+            this.delete(projectName, taskID)
+            taskList.update(projectName);
+        })
 
         dropdownContent.append(editOption, removeOption);
         dropdown.append(taskOptions, dropdownContent);
@@ -227,16 +239,10 @@ class taskMenu {
         return dropdown;
     }
 
-
-
     static delete(projectName, taskIndex){
-        taskFunction.getTasks(projectName).slice(taskIndex);
+        taskFunction.getTasks(projectName).splice(taskIndex, 1);
     }
 
-    static addEvents(){
-        const task = qsAll(".task-status");
-        taskStatusCheckmark.addEventListener("", () => this.markComplete())
-    }
 
 }
 
@@ -255,7 +261,6 @@ class addTaskForm {
             newTask = taskFunction.createTask("Default", {
                 title, dueDate, description, isImportant
             })
-            console.log(taskFunction.getTasks("Default"))
             Popup.toggle();
         }
         event.preventDefault();
