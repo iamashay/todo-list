@@ -2,6 +2,8 @@ import * as projectFunction from "./modules/projectFunctions.js"
 import * as taskFunction from "./modules/taskFunctions.js"
 import { compareAsc, format, isValid, parse, fromUnixTime } from "date-fns"
 import { qs, qsAll } from "./modules/globalFunctions.js"
+import { Popup } from "./modules/popup.js";
+import { generateAddTaskForm, generateEditTaskForm } from "./modules/loadPage.js";
 
 const taskListContainer = qs(".task-list-container");
 const projectListContainer = qs("#project-list");
@@ -19,42 +21,6 @@ taskFunction.createTask("Default", {
 })
 
 
-class Popup {
-
-    static toggle() {
-        const popupOverlay = qs(".popup-overlay");
-        const popupContainer = qs(".popup-container");
-
-        if (popupOverlay.style.display === "none"){
-            popupOverlay.style.display = "";
-            popupOverlay.style.animation = "openPopup 0.5s";
-        }else {
-            popupOverlay.style.animation = "removePopup 0.5s";
-            setTimeout(() => {
-                popupOverlay.style.display = "none";
-                popupOverlay.style.animation = "";    
-            }, 500)
-        }
-    }
-
-
-    static addEvents() {
-        const popupOverlay = qs(".popup-overlay");
-        const popupContainer = qs(".popup-container");
-        const closePopupBut = qs(".close-popup");
-
-        popupContainer.addEventListener("click", (e) => e.stopPropagation());
-        popupOverlay.addEventListener("click", this.toggle);
-        closePopupBut.addEventListener("click", this.toggle);
-
-
-    }
-
-    static init() {
-        this.addEvents();
-    }
-
-}
 
 class taskList {
 
@@ -220,6 +186,17 @@ class taskDropdownMenu {
         editOption.textContent = "Edit";
         editOption.className = "edit-task";
         editOption.className = "dropdown-option";
+
+        editOption.addEventListener("click", ()=>{
+            Popup.new(generateEditTaskForm());
+            this.populateEditForm(projectName, taskID);
+            Popup.toggle()
+            const myForm = qs(".edit-task-form");
+            myForm.addEventListener("submit", (event) => {
+                this.processEditForm(projectName, taskID);
+                event.preventDefault();
+            })
+        })
         
         const removeOption = document.createElement("div");
         removeOption.textContent = "Remove";
@@ -233,15 +210,53 @@ class taskDropdownMenu {
             taskList.update(projectName);
         })
 
+
         dropdownContent.append(editOption, removeOption);
         dropdown.append(taskOptions, dropdownContent);
 
         return dropdown;
     }
 
+    static populateEditForm(projectName, taskID){
+        const currentTask = taskFunction.getSpecificTask(projectName, taskID); 
+        const title = qs("#task-title");
+        let dueDate = qs("#task-due-date");
+        const isImportant = qs("#task-important");
+        const description = qs("#task-description");
+        
+
+        title.value = currentTask.title;
+        dueDate.value = format(new Date(currentTask.dueDate), "yyyy-MM-dd");
+        isImportant.checked = currentTask.isImportant;
+        description.value = currentTask.description;
+    }
+
+    static processEditForm(projectName, taskID){
+        const title = qs("#task-title").value;
+        let dueDate = qs("#task-due-date").value;
+        const isImportant = qs("#task-important").checked;
+        const description = qs("#task-description").value;
+        const myForm = qs(".edit-task-form");
+
+        if (title && title.length > 0){
+            dueDate = +new Date(dueDate);
+
+            taskFunction.editTask(projectName, taskID, {
+                title, dueDate, isImportant, description
+            }); 
+            taskList.update(projectName);
+            Popup.toggle();
+        }
+        //event.preventDefault();
+
+        //taskList.putNew(newTask, "Default");
+        myForm.reset();
+    }
+
     static delete(projectName, taskIndex){
         taskFunction.getTasks(projectName).splice(taskIndex, 1);
     }
+
 
 
 }
@@ -269,29 +284,50 @@ class addTaskForm {
         myForm.reset();
     }
 
-    static addEvents(popupToggle) {
-
-        const addTaskPopupButton = qs("#add-task");
-        addTaskPopupButton.addEventListener("click", popupToggle);
-
-        const myForm = qs(".add-task-form");
-
+    static init(Popup) {
+        
+    const addTaskPopupButton = qs("#add-task");
+    addTaskPopupButton.addEventListener("click", () => {
+        const myForm = Popup.new(generateAddTaskForm())
+        Popup.toggle()
         myForm.addEventListener("submit", this.processForm);
+    });    
+    const myForm = qs(".add-task-form");
+
     }
 
-    static init(popupToggle) {
-        this.addEvents(popupToggle);
+}
+
+class leftSidebar {
+    
+    static toggle(){
+        
+        const sidebar = qs("#sidebar");
+        if (sidebar.style.display === "none"){
+            sidebar.style.display = "flex";
+            sidebar.style.animation = "show 0.5s";
+        }else {
+            sidebar.style.animation = "hide 0.5s";
+            setTimeout(() => {
+                sidebar.style.display = "none";
+                sidebar.style.animation = "";    
+            }, 500)
+        }
     }
 
+    static init(){
+        const menuBtn = qs(".menu-icon");
+        menuBtn.addEventListener("click", this.toggle);
+    }
 }
 
 
 function displayController() {
     
     Popup.init();
-    addTaskForm.init(Popup.toggle);
-    taskList.update("Default");
-
+    addTaskForm.init(Popup);
+    taskList.update("Default"); 
+    leftSidebar.init();
     const taskContainerOptions = qsAll(".task-container-option");
     taskContainerOptions.forEach((option) => {
         option.addEventListener("change", () => {taskList.update("Default")});

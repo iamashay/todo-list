@@ -8,7 +8,7 @@ function createTask(projectName, jsonValue){
 }
 
 function editTask(projectName, taskID, jsonValue){
-    const myTask = projectList[projectName][taskID];
+    const myTask = projectList[projectName].taskList[taskID];
     myTask.title = jsonValue.title;
     myTask.dueDate = jsonValue.dueDate;
     myTask.description = jsonValue.description;
@@ -25,9 +25,13 @@ function getTasks(projectName){
     return projectList[projectName].taskList;
 }
 
+function getSpecificTask(projectName, taskID){
+    return projectList[projectName].taskList[taskID];
+}
+
 function changeTaskStatus(projectName, taskID, status){
-    const myTask = projectList[projectName][taskID];
+    const myTask = projectList[projectName].taskList[taskID];
     myTask.status = status;
 }
 
-export { createTask, editTask, deleteTask, getTasks, changeTaskStatus}
+export { createTask, editTask, deleteTask, getTasks, getSpecificTask, changeTaskStatus}
