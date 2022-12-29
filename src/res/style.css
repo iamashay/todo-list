@@ -284,26 +284,6 @@ header {
     position: relative;
 }
 
-@keyframes removePopup {
-    0%   {
-        opacity: 100%;
-    }
-    100% {
-        margin-right: 80vw;
-        opacity: 0%;
-        display: none;
-    }
-}
-
-@keyframes openPopup {
-    0%   {
-        opacity: 0%;
-    }
-    100% {
-        opacity: 100%;
-    }
-}
-
 /* end popup */
 
 .input-box {
@@ -317,7 +297,7 @@ header {
     padding: 2px;
 }
 
-.add-task-form {
+.add-task-form, form {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -328,7 +308,7 @@ header {
     cursor: pointer;
 }
 
-.add-task-form .normal-button {
+.add-task-form .normal-button, .edit-task-form .normal-button  {
     align-self: center;
 }
 
@@ -411,3 +391,23 @@ header {
   .dropdown:hover .dropbtn {background-color: #3e8e41;}
 
   /* End dropdown */
+
+@keyframes hide {
+    0%   {
+        opacity: 100%;
+    }
+    100% {
+        opacity: 0%;
+        display: none;
+    }
+}
+
+@keyframes show {
+    0%   {
+        opacity: 0%;
+    }
+    100% {
+        opacity: 100%;
+        display: flex;
+    }
+}
