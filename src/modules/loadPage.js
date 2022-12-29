@@ -289,7 +289,26 @@ function generateAddTaskForm(){
     return myForm;
 }
 
-function generatePopup() {
+function generateEditTaskForm(){
+    
+    const myForm = document.createElement("form");
+    myForm.className = "edit-task-form";
+
+    const taskTitle = generateTaskFormInput("task-title", "Title", "text", true);
+    const taskDueDate = generateTaskFormInput("task-due-date", "Due Date", "date", true);
+    const taskImportant = generateTaskFormInput("task-important", "Is Important?", "checkbox");
+    const taskDescription = generateTaskFormInput("task-description", "Description", "textarea");
+    
+    const submitBut = document.createElement("button");
+    submitBut.className = "normal-button";
+    submitBut.textContent = "Add Task";
+
+    myForm.append(taskTitle, taskDueDate, taskImportant, taskDescription, submitBut);
+
+    return myForm;
+}
+
+function generatePopup(){
     const popupOverlay = document.createElement("div");
     popupOverlay.className = "popup-overlay";
     popupOverlay.style.display = "none";
@@ -297,18 +316,12 @@ function generatePopup() {
     const popupContainer = document.createElement("div");
     popupContainer.className = "popup-container";
 
-    const closePopupBut = document.createElement("div");
-    closePopupBut.className = "close-popup";
-    closePopupBut.textContent = "X";
-
-    const myForm = generateAddTaskForm();
     popupOverlay.appendChild(popupContainer);
-    popupContainer.append(closePopupBut, myForm);
 
     return popupOverlay;
 }
 
-export const loadPage = () => {
+const loadPage = () => {
     const body = document.body;
     const header = generateHeader();
 
@@ -317,6 +330,7 @@ export const loadPage = () => {
 
     const sidebar = generateSidebar();
     const taskContainer = generateTaskContainer();
+    const popup = generatePopup();
 
     mainContainer.appendChild(sidebar);
     mainContainer.appendChild(taskContainer);
@@ -324,6 +338,9 @@ export const loadPage = () => {
     body.appendChild(header);
     body.appendChild(mainContainer);
 
-    body.appendChild(generatePopup())
+    body.appendChild(popup)
 
 }
+
+export { loadPage, generateAddTaskForm, generateEditTaskForm}
+
