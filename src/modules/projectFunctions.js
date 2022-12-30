@@ -7,6 +7,9 @@ function createProject(projectName){
 }
 
 createProject("Default")
+createProject("Job")
+createProject("Home")
+createProject("College")
 
 function editProject(oldProjectName, newProjectName){
     const myProject = projectList[oldProjectName];
