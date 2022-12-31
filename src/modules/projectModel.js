@@ -1,4 +1,4 @@
-const projectList = {}
+let projectList = {}
 
 class Project {
     
@@ -16,4 +16,12 @@ class Project {
     }
 }
 
-export { Project, projectList };
+function getProjectList(){
+    return projectList;
+}
+
+function emptyProjectList(data){
+    projectList = {};
+}
+
+export { Project, projectList, getProjectList, emptyProjectList};

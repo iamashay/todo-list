@@ -19,10 +19,11 @@ function createProject(projectName){
     return projectName;
 }
 
-createProject("Personal")
+createProject("Personal");
+/* createProject("Personal")
 createProject("Job")
 createProject("Home")
-createProject("College")
+createProject("College") */
 
 function editProject(oldProjectName, newProjectName){
     const myProject = projectList[oldProjectName];
@@ -49,5 +50,6 @@ function deleteProject(projectName){
 function getProjects() {
     return Object.getOwnPropertyNames(projectList);
 }
+
 
 export {createProject, editProject, deleteProject, getProjects}

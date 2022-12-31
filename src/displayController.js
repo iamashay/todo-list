@@ -4,12 +4,12 @@ import { compareAsc, format, isValid, parse, fromUnixTime } from "date-fns"
 import { qs, qsAll } from "./modules/globalFunctions.js"
 import { Popup } from "./modules/popup.js";
 import { generateAddTaskForm, generateEditTaskForm } from "./modules/loadPage.js";
-
+import * as cookieController from "./modules/cookieController.js";
 
 const taskListContainer = qs(".task-list-container");
 const projectListContainer = qs("#project-list");
 
-taskFunction.createTask("Personal", {
+/* taskFunction.createTask("Personal", {
     title: "asd", dueDate: 1760502233444, description: "sdf", isImportant: true, status: false, projectName: "Personal"
 })
 
@@ -18,10 +18,10 @@ taskFunction.createTask("Personal", {
 })
 
 taskFunction.createTask("Personal", {
-    title: "Yo", dueDate: +new Date(), description: "sdf", isImportant: true, status: true, projectName: "Personal"
-})
+    title: "Yo", dueDate: +new Date(), description: "sdf", isImportant: true, status: true, projectName: "Home"
+}) */
 
-taskFunction.createTask("Home", {"_title":"Yo","_dueDate":1672503392837,"_description":"sdf","_isImportant":true,"_status":true,"_projectName":"Personal"})
+//taskFunction.createTask("Home", {"_title":"Yo","_dueDate":1672503392837,"_description":"sdf","_isImportant":true,"_status":true,"_projectName":"Personal"})
 
 class taskList {
 
@@ -190,7 +190,7 @@ class taskList {
             starImage.style.filter = "grayscale(1)"
             task.isImportant = false;
         }
-    
+        cookieController.updateCookie();
     }
 
     static changeTabName(name){
@@ -277,6 +277,7 @@ class taskDropdownMenu {
             taskFunction.editTask(projectName, taskID, {
                 title, dueDate, isImportant, description, projectName
             }); 
+            cookieController.updateCookie();
             taskList.update(projectName);
             Popup.toggle();
         }
@@ -288,6 +289,7 @@ class taskDropdownMenu {
 
     static delete(projectName, taskIndex) {
         taskFunction.getTasks(projectName).splice(taskIndex, 1);
+        cookieController.updateCookie();
     }
 
 
@@ -311,11 +313,13 @@ class addTaskForm {
                 title, dueDate, description, isImportant, projectName
             })
             Popup.toggle();
+            cookieController.updateCookie();
         }
         event.preventDefault();
 
         taskList.putNew(newTask, projectName);
         myForm.reset();
+
     }
 
     static hideButton(){
@@ -474,6 +478,7 @@ class projectNodes {
     static createNewProject(){
         const newProjectName = projectFunction.createProject("Untitled");
         this.build(newProjectName);
+        cookieController.updateCookie();
     }
 
     static init(){
@@ -503,7 +508,7 @@ class projectOptions {
         }else {
             alert("There has to be atleast one project!")
         }
-
+        cookieController.updateCookie();
     }
 
     static showOptions(projectName){
@@ -548,17 +553,18 @@ class projectOptions {
                     projectNodes.populateProjectBox(true);
                     projectNodes.makeDefault(projectNodes.currentProject);  
                 }
+                cookieController.updateCookie();
         });
     }
 }
 
 function displayController() {
-
+    cookieController.processFetchedCookie();
     Popup.init();
     addTaskForm.init(Popup);
     taskList.update("Personal"); 
     leftSidebar.init();
-    projectNodes.init(); 
+    projectNodes.init();
     const taskContainerOptions = qsAll(".task-container-option");
     taskContainerOptions.forEach((option) => {
         option.addEventListener("change", () => {taskList.update(projectNodes.currentProject)});

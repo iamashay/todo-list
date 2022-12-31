@@ -35,6 +35,5 @@ function changeTaskStatus(projectName, taskID, status){
     myTask.status = status;
 }
 
-setInterval(()=>{console.log(JSON.stringify(projectList))}, 5000)
 
 export { createTask, editTask, deleteTask, getTasks, getSpecificTask, changeTaskStatus}
