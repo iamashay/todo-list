@@ -63,10 +63,13 @@ function generateProjectContainer(){
     const addProjectTitle = document.createElement("span");
     addProjectTitle.textContent = "Add Project";
 
+    const projects = document.createElement("ul");
+    projects.classList = "projects";
+
     addProject.appendChild(addProjectImg);
     addProject.appendChild(addProjectTitle);
 
-    projectList.appendChild(addProject);
+    projectList.append(addProject, projects);
 
     projectContainer.appendChild(title);
     projectContainer.appendChild(projectList);
@@ -74,12 +77,16 @@ function generateProjectContainer(){
     return projectContainer;
 }
 
+
 function generateSidebar() {
     const sidebar = document.createElement("div");
     sidebar.id = "sidebar";
 
     const showAllOption = generateSidebarOption("Show All");
     sidebar.appendChild(showAllOption)
+
+    const favOption = generateSidebarOption("Favourite");
+    sidebar.appendChild(favOption)
 
     const projectContainer = generateProjectContainer();
     sidebar.appendChild(projectContainer)
@@ -146,9 +153,13 @@ function generateTaskOptionContainer(){
     const secondOptionContainer = document.createElement("div");
     secondOptionContainer.className = "second-option-container";
 
+    const tabName = document.createElement("div");
+    tabName.id = "tab-name";
+
     taskOptionContainer.appendChild(selectBoxContainer);
     secondOptionContainer.appendChild(addTaskButton);
     taskOptionContainer.appendChild(secondOptionContainer);
+    taskOptionContainer.appendChild(tabName);
     
     return taskOptionContainer;
 }

@@ -5,22 +5,23 @@ import { qs, qsAll } from "./modules/globalFunctions.js"
 import { Popup } from "./modules/popup.js";
 import { generateAddTaskForm, generateEditTaskForm } from "./modules/loadPage.js";
 
+
 const taskListContainer = qs(".task-list-container");
 const projectListContainer = qs("#project-list");
 
-taskFunction.createTask("Default", {
-    title: "asd", dueDate: 1760502233444, description: "sdf", isImportant: true, status: false
+taskFunction.createTask("Personal", {
+    title: "asd", dueDate: 1760502233444, description: "sdf", isImportant: true, status: false, projectName: "Personal"
 })
 
-taskFunction.createTask("Default", {
-    title: "Yo", dueDate: 1760502233444, description: "sdf", isImportant: false, status: true
+taskFunction.createTask("Personal", {
+    title: "Yo", dueDate: 1760502233444, description: "sdf", isImportant: false, status: true, projectName: "Personal"
 })
 
-taskFunction.createTask("Default", {
-    title: "Yo", dueDate: +new Date(), description: "sdf", isImportant: true, status: true
+taskFunction.createTask("Personal", {
+    title: "Yo", dueDate: +new Date(), description: "sdf", isImportant: true, status: true, projectName: "Personal"
 })
 
-
+taskFunction.createTask("Home", {"_title":"Yo","_dueDate":1672503392837,"_description":"sdf","_isImportant":true,"_status":true,"_projectName":"Personal"})
 
 class taskList {
 
@@ -137,16 +138,42 @@ class taskList {
         taskListContainer.prepend(taskDiv);
     }
 
-    static update(projectName){
+    static update(projectName, showAll = leftSidebar.showAll, fav = leftSidebar.fav){
         const taskListContainer = qs("#task-list-container");
         taskListContainer.innerHTML = "";
-        const tasks = taskFunction.getTasks(projectName);
+        
+        if (showAll){
 
-        tasks.forEach((task, taskIndex) => {
-            if (!this.filter(task)) return;
-            const taskDiv = this.buildTaskElement(task, projectName, taskIndex);
-            taskListContainer.append(taskDiv);
-        })
+            const projects = projectFunction.getProjects();
+            for (let projectName of projects){
+                const tasks = taskFunction.getTasks(projectName);
+                tasks.forEach((task, taskIndex) => {
+                    if (!this.filter(task)) return;
+                    const taskDiv = this.buildTaskElement(task, projectName, taskIndex);
+                    taskListContainer.append(taskDiv);
+                })
+            }
+
+        }else if (fav) {
+            const projects = projectFunction.getProjects();
+            for (let projectName of projects){
+                const tasks = taskFunction.getTasks(projectName);
+                tasks.forEach((task, taskIndex) => {
+                    if (!task.isImportant) return;
+                    if (!this.filter(task)) return;
+                    const taskDiv = this.buildTaskElement(task, projectName, taskIndex);
+                    taskListContainer.append(taskDiv);
+                })
+            }
+        }else {
+            const tasks = taskFunction.getTasks(projectName);
+
+            tasks.forEach((task, taskIndex) => {
+                if (!this.filter(task)) return;
+                const taskDiv = this.buildTaskElement(task, projectName, taskIndex);
+                taskListContainer.append(taskDiv);
+            })
+        }
     }
 
     static markTaskStatus(task, projectName, taskIndex){
@@ -165,6 +192,12 @@ class taskList {
         }
     
     }
+
+    static changeTabName(name){
+        const tabDiv = qs("#tab-name");
+        tabDiv.textContent = name;
+    }
+
 
 }
 
@@ -227,6 +260,7 @@ class taskDropdownMenu {
 
         title.value = currentTask.title;
         dueDate.value = format(new Date(currentTask.dueDate), "yyyy-MM-dd");
+        console.log(currentTask)
         isImportant.checked = currentTask.isImportant;
         description.value = currentTask.description;
     }
@@ -237,12 +271,11 @@ class taskDropdownMenu {
         const isImportant = qs("#task-important").checked;
         const description = qs("#task-description").value;
         const myForm = qs(".edit-task-form");
-
         if (title && title.length > 0){
             dueDate = +new Date(dueDate);
 
             taskFunction.editTask(projectName, taskID, {
-                title, dueDate, isImportant, description
+                title, dueDate, isImportant, description, projectName
             }); 
             taskList.update(projectName);
             Popup.toggle();
@@ -253,7 +286,7 @@ class taskDropdownMenu {
         myForm.reset();
     }
 
-    static delete(projectName, taskIndex){
+    static delete(projectName, taskIndex) {
         taskFunction.getTasks(projectName).splice(taskIndex, 1);
     }
 
@@ -267,21 +300,32 @@ class addTaskForm {
         const title = qs("#task-title").value;
         let dueDate = qs("#task-due-date").value;
         const isImportant = qs("#task-important").checked;
-        const description = qs("#task-description").value;
+        let description = qs("#task-description").value;
+        
         const myForm = qs(".add-task-form");
-
+        const projectName = projectNodes.currentProject;
         let newTask;
         if (title && title.length > 0){
             dueDate = +new Date(dueDate);
-            newTask = taskFunction.createTask("Default", {
-                title, dueDate, description, isImportant
+            newTask = taskFunction.createTask(projectName, {
+                title, dueDate, description, isImportant, projectName
             })
             Popup.toggle();
         }
         event.preventDefault();
 
-        taskList.putNew(newTask, "Default");
+        taskList.putNew(newTask, projectName);
         myForm.reset();
+    }
+
+    static hideButton(){
+        const addTaskPopupButton = qs("#add-task");
+        addTaskPopupButton.style.visibility = "hidden";
+    }
+
+    static showButton(){
+        const addTaskPopupButton = qs("#add-task");
+        addTaskPopupButton.style.visibility = "visible";
     }
 
     static init(Popup) {
@@ -300,6 +344,9 @@ class addTaskForm {
 
 class leftSidebar {
     
+    static showAll = false;
+    static fav = false; 
+
     static toggle(){
         
         const sidebar = qs("#sidebar");
@@ -315,22 +362,206 @@ class leftSidebar {
         }
     }
 
+
     static init(){
         const menuBtn = qs(".menu-icon");
+        const showAllOption = qs("#show-all")
+        const favOption = qs("#favourite")
+        showAllOption.addEventListener("click", () => {
+            taskList.changeTabName("Show All Tasks")
+            this.showAll = true;
+            this.fav = false;
+            taskList.update("");
+            addTaskForm.hideButton();
+            projectNodes.removeDefault();
+
+        })
+        favOption.addEventListener("click", () => {
+            taskList.changeTabName("Favourite Tasks")
+            this.showAll = false;
+            this.fav = true;
+            taskList.update("");
+            addTaskForm.hideButton();
+            projectNodes.removeDefault();
+
+        })
         menuBtn.addEventListener("click", this.toggle);
     }
 }
 
+class projectNodes {
+    static currentProject = projectFunction.getProjects()[0];
+
+    static build(projectName){
+        const projectsBox = qs(".projects");
+        const project = document.createElement("li");
+        project.setAttribute("data-project", projectName);
+        project.className = "project project-inactive";
+        
+        const projectOptionsBox = document.createElement("div");
+        projectOptionsBox.classList = "project-options";
+
+
+        const projectNameDiv = document.createElement("div");
+        projectNameDiv.classList = "project-name";
+        projectNameDiv.textContent = projectName;
+
+        const deleteBtn = document.createElement("img");
+        deleteBtn.src = require("./res/imgs/delete-project.png");
+        deleteBtn.alt = `Delete ${projectName}`;
+        deleteBtn.class = "delete-project";
+        deleteBtn.style.width = "16px";
+        deleteBtn.style.height = "16px";
+
+        const editBtn = document.createElement("img");
+        editBtn.src = require("./res/imgs/edit-project.png");
+        editBtn.alt = `Edit ${projectName}`;
+        editBtn.class = "Edit-project";
+        editBtn.style.width = "16px";
+        editBtn.style.height = "16px";
+        
+        projectOptionsBox.append(projectNameDiv, editBtn, deleteBtn);
+        
+        deleteBtn.addEventListener("click", (e)=> {
+            projectOptions.deleteProject(projectName); 
+            e.stopPropagation()
+        });
+        editBtn.addEventListener("click", (e)=> {
+            projectOptions.editProject(projectName); 
+            e.stopPropagation()
+        });
+
+        
+        project.append(projectOptionsBox);
+        projectsBox.append(project)
+        project.addEventListener("click",() => {
+            addTaskForm.showButton();
+            leftSidebar.showAll = false;
+            leftSidebar.fav = false; 
+            this.makeDefault(projectName) 
+       });
+
+        project.addEventListener("mouseover", () => { projectOptions.showOptions(projectName) });
+        project.addEventListener("mouseleave", () => { projectOptions.hideOptions(projectName) });
+    }
+
+    static populateProjectBox(isUpdate=false){
+        const projectsBox = qs(".projects");
+        if (isUpdate) projectsBox.innerHTML = "";
+        const projects = projectFunction.getProjects();
+        
+        for (let projectName of projects){
+            this.build(projectName);
+        }
+    }
+
+    static makeDefault(projectName){
+        //console.log(this.currentProject, projectFunction.getProjects()[0])
+        const previousProject = qs(`li[data-project="${this.currentProject}"]`);
+        previousProject.classList = `project project-inactive`;
+        const project = qs(`li[data-project="${projectName}"]`);
+        taskList.changeTabName(projectName);
+        this.currentProject = projectName;
+        project.classList = `project project-active`;
+        taskList.update(projectName);
+    }
+
+    static removeDefault() {
+        const previousProject = qs(`li[data-project="${this.currentProject}"]`);
+        previousProject.classList = `project project-inactive`;
+    }
+
+    static createNewProject(){
+        const newProjectName = projectFunction.createProject("Untitled");
+        this.build(newProjectName);
+    }
+
+    static init(){
+        this.populateProjectBox()
+        const initialProject = projectFunction.getProjects()[0];
+        this.makeDefault(initialProject)
+        const addProjectBtn = qs(".add-project");
+        addProjectBtn.addEventListener("click", this.createNewProject.bind(this));
+    }
+
+    static resetCurrentProject(){
+        this.currentProject = projectFunction.getProjects()[0];
+    }
+}
+
+class projectOptions {
+    static deleteProject(projectName){
+        let isDeleted = projectFunction.deleteProject(projectName);
+
+        if (isDeleted){ 
+            if (projectNodes.currentProject === projectName){
+                projectNodes.resetCurrentProject();
+                taskList.changeTabName(projectNodes.currentProject);
+            }
+            projectNodes.populateProjectBox(true);
+            projectNodes.makeDefault(projectNodes.currentProject);                
+        }else {
+            alert("There has to be atleast one project!")
+        }
+
+    }
+
+    static showOptions(projectName){
+        const imgs = qsAll(`.project[data-project="${projectName}"] img`);
+        for (let img of imgs){
+            img.style.visibility = "visible";
+        }
+    }
+
+    static hideOptions(projectName){
+        const imgs = qsAll(`.project[data-project="${projectName}"] img`);
+        for (let img of imgs){
+            img.style.visibility = "hidden";
+        }
+    }
+
+    static editProject(projectName){
+        const projectNameDiv = qs(`.project[data-project="${projectName}"] .project-name`);
+        console.log(projectNameDiv)
+        projectNameDiv.contentEditable = "true";
+        projectNameDiv.focus();
+
+        projectNameDiv.addEventListener("keypress", (e) => {
+            if (e.code == "Enter") {
+                projectNameDiv.blur();
+            }
+
+            if (projectNameDiv.textContent.length >= 17){
+                projectNameDiv.blur();
+            }
+        });
+
+        projectNameDiv.addEventListener("focusout", (e) => {
+                projectNameDiv.contentEditable = "false";
+                const newProjectName = projectNameDiv.textContent;
+                if(projectName !== newProjectName){
+                    if(projectNodes.currentProject === projectName){
+                        projectNodes.currentProject = newProjectName;
+                        taskList.changeTabName(projectNodes.currentProject);
+                    }
+                    projectFunction.editProject(projectName, newProjectName);
+                    projectNodes.populateProjectBox(true);
+                    projectNodes.makeDefault(projectNodes.currentProject);  
+                }
+        });
+    }
+}
 
 function displayController() {
-    
+
     Popup.init();
     addTaskForm.init(Popup);
-    taskList.update("Default"); 
+    taskList.update("Personal"); 
     leftSidebar.init();
+    projectNodes.init(); 
     const taskContainerOptions = qsAll(".task-container-option");
     taskContainerOptions.forEach((option) => {
-        option.addEventListener("change", () => {taskList.update("Default")});
+        option.addEventListener("change", () => {taskList.update(projectNodes.currentProject)});
     })
 }
 

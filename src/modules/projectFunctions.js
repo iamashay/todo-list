@@ -1,12 +1,25 @@
 import {Project, projectList} from "./projectModel.js"
 
-function createProject(projectName){
-    const newProject = new Project(projectName);
-    projectList[projectName] = newProject;
-    return newProject;
+
+function makeNameUnique(projectName){
+    let i = 1;
+    let tempName = projectName;
+    while (tempName in projectList){
+        tempName = projectName;
+        tempName += "-"+i;
+        i++;
+    }
+    return tempName;
 }
 
-createProject("Default")
+function createProject(projectName){
+    projectName = makeNameUnique(projectName);
+    const newProject = new Project(projectName);
+    projectList[projectName] = newProject;
+    return projectName;
+}
+
+createProject("Personal")
 createProject("Job")
 createProject("Home")
 createProject("College")
@@ -14,9 +27,9 @@ createProject("College")
 function editProject(oldProjectName, newProjectName){
     const myProject = projectList[oldProjectName];
     if (!(newProjectName in projectList)) {
-        myProject.name = projectName;
+        myProject.name = newProjectName;
         //create a propery with the new name and copy old property's data to it
-        projectList[projectName] = projectList[oldProjectName]; 
+        projectList[newProjectName] = projectList[oldProjectName]; 
         //delete the old property
         delete projectList[oldProjectName];
     }
@@ -24,6 +37,8 @@ function editProject(oldProjectName, newProjectName){
 }
 
 function deleteProject(projectName){
+    if (Object.getOwnPropertyNames(projectList).length == 1) return;
+
     if (projectName in projectList){
         delete projectList[projectName];
         return true;

@@ -2,7 +2,7 @@ import {Task} from "./taskModel"
 import {projectList} from "./projectModel"
 
 function createTask(projectName, jsonValue){
-    const newTask = new Task(jsonValue.title, jsonValue.dueDate, jsonValue.description, jsonValue.isImportant, jsonValue.status);
+    const newTask = new Task(jsonValue.title, jsonValue.dueDate, jsonValue.description, jsonValue.isImportant, jsonValue.status, jsonValue.projectName);
     projectList[projectName].taskList.unshift(newTask);
     return newTask;
 }
@@ -13,6 +13,7 @@ function editTask(projectName, taskID, jsonValue){
     myTask.dueDate = jsonValue.dueDate;
     myTask.description = jsonValue.description;
     myTask.isImportant = jsonValue.isImportant;
+    myTask.projectName = jsonValue.projectName;
     return myTask;
 }
 
@@ -33,5 +34,7 @@ function changeTaskStatus(projectName, taskID, status){
     const myTask = projectList[projectName].taskList[taskID];
     myTask.status = status;
 }
+
+setInterval(()=>{console.log(JSON.stringify(projectList))}, 5000)
 
 export { createTask, editTask, deleteTask, getTasks, getSpecificTask, changeTaskStatus}

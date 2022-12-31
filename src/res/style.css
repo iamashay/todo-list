@@ -81,7 +81,8 @@ header {
 .sidebar-option {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 10px;
+    cursor: pointer;
 }
 
 #projects-heading {
@@ -410,4 +411,48 @@ header {
         opacity: 100%;
         display: flex;
     }
+}
+
+.projects {
+    padding: 0;
+    margin-left: 24px;
+    font-size: 18px;
+}
+
+.project-active {
+    list-style-image: url("./imgs/project-active.png");
+}
+
+.project-inactive {
+    list-style-image: url("./imgs/project-inactive.png");
+}
+
+.project {
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.add-project {
+    cursor: pointer;
+}
+
+#tab-name {
+    align-self: center;
+    font-size: calc(12px + 1vw);
+    font-weight: 600;
+    color: #404040;
+    font-family: sans-serif;
+}
+
+.project-options {
+    display: flex;
+    gap: 10px;
+}
+
+.project-options img {
+    visibility: hidden;
+}
+
+.project-name {
+    flex-grow: 1;
 }

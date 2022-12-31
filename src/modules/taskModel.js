@@ -1,11 +1,12 @@
 class Task {
     
-    constructor(title, dueDate, description = null, isImportant = false, status = false){
+    constructor(title, dueDate, description = "", isImportant = false, status = false, projectName = ""){
         this.title = title;
         this.dueDate = dueDate;
         this.description = description;
         this.isImportant = isImportant;
         this.status = status;
+        this.projectName = projectName;
     }
 
     get title(){
@@ -31,7 +32,6 @@ class Task {
     }
 
     set description(newDescription){
-        if (!newDescription) return;
         this._description = newDescription;
     }
 
@@ -52,6 +52,13 @@ class Task {
         this._status = newStatus;
     }
 
+    get projectName(){
+        return this._projectName;
+    }
+
+    set projectName(newProjectName){
+        this._projectName = newProjectName;
+    }
 
 }
 
