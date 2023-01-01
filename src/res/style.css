@@ -479,4 +479,7 @@ header {
     #add-task, .task-container-option {
         padding: 4px;
     }
+    .task-wrapper{
+        width: 100%;
+    }
 }
