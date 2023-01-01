@@ -86,7 +86,7 @@ header {
 }
 
 #projects-heading {
-    font-size: 24px;
+    font-size: calc(12px + 1vw);
     border-bottom: 1px solid #cacaca;
     margin-bottom: 10px;
     padding-bottom: 4px;
@@ -455,4 +455,28 @@ header {
 
 .project-name {
     flex-grow: 1;
+}
+
+.projects-wrapper {
+    overflow: auto;
+    max-height: 70vh;
+    margin-top: 15px;
+}
+
+@media only screen and (max-width: 700px) {
+    #sidebar {
+        width: 100%;
+        min-height: 324px;
+    }
+
+    #main-container {
+        flex-direction: column;
+    }
+
+    .projects-wrapper {
+        max-height: 140px;
+    }
+    #add-task, .task-container-option {
+        padding: 4px;
+    }
 }

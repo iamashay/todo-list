@@ -63,13 +63,17 @@ function generateProjectContainer(){
     const addProjectTitle = document.createElement("span");
     addProjectTitle.textContent = "Add Project";
 
+    const projectsWrapper = document.createElement("div");
+    projectsWrapper.classList = "projects-wrapper";
+
     const projects = document.createElement("ul");
     projects.classList = "projects";
 
     addProject.appendChild(addProjectImg);
     addProject.appendChild(addProjectTitle);
 
-    projectList.append(addProject, projects);
+    projectsWrapper.append(projects)
+    projectList.append(addProject, projectsWrapper);
 
     projectContainer.appendChild(title);
     projectContainer.appendChild(projectList);
