@@ -27,7 +27,10 @@ class taskList {
 
     static buildTaskElement(task, projectName, taskID) {
         const title = task.title;
-        const date =  format(new Date(task.dueDate), "do MMMM, yyyy");
+        let date =  format(new Date(task.dueDate), "do MMMM, yyyy");
+        if (window.innerWidth <= 700){
+            date =  format(new Date(task.dueDate), "dd-MM-yyyy");
+        }
         const isImportant = task.isImportant;
         const description = task.description;
         const taskStatus = task.status;

@@ -147,6 +147,10 @@ header {
     align-items: center;
 }
 
+.left-task-container {
+    flex-grow: 1;
+}
+
 #add-task {
     padding: 8px;
     cursor: pointer;
@@ -481,5 +485,12 @@ header {
     }
     .task-wrapper{
         width: 100%;
+    }
+
+    .task-date {
+        font-size: 12px;
+    }
+    #task-list-container {
+        margin-top: 18px;
     }
 }
