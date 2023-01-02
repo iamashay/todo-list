@@ -281,9 +281,8 @@ header {
 }
 
 .popup-container {
-    margin-top: 80px;
     background-color: white;
-    width: min(50vw, 400px);
+    width: calc(10vw + 400px);
     padding: 20px;
     border-radius: 6px;
     position: relative;
